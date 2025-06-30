@@ -1,5 +1,6 @@
 import React from "react";
 import { PrismaClient } from "@/generated/prisma";
+import { createPost } from "@/actions/action";
 // name of the folder is the route
 
 const prisma = new PrismaClient();
@@ -20,6 +21,31 @@ export default async function Page() {
           </li>
         ))}
       </ul>
+
+      <form action={createPost} className="max-w-[400px] mx-auto mt-24">
+
+        <input
+          type="text"
+          placeholder="Title"
+          name="title"
+          className="border p-2 mb-2 w-full"
+        />
+
+        <textarea
+          placeholder="Content"
+          name="content"
+          className="border p-2 mb-2 w-full"
+        ></textarea>
+
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-3 py-1 rounded-md"
+        >
+          create post
+        </button>
+
+      </form>
+      
     </div>
   );
 }
