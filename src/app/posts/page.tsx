@@ -1,10 +1,19 @@
 import React from "react";
 import { PrismaClient } from "@/generated/prisma";
 import { createPost } from "@/actions/action";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { redirect } from "next/navigation";
 // name of the folder is the route
 
 const prisma = new PrismaClient();
 export default async function Page() {
+
+  // Check if the user is authenticated
+  // If not authenticated, redirect to the login page
+  const { isAuthenticated } = getKindeServerSession();
+  if (!(await isAuthenticated())) {
+    return redirect("/api/auth/login");
+  }
   const posts = await prisma.post.findMany();
   return (
     <div className="text-center pt-12">
