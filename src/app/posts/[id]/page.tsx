@@ -1,6 +1,7 @@
 import UpvoteButton from "@/app/components/upvote-button";
 import { PrismaClient } from "@/generated/prisma";
-import { notFound } from "next/navigation";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { notFound, redirect } from "next/navigation";
 import React from "react";
 
 const prisma = new PrismaClient();
@@ -8,6 +9,14 @@ const prisma = new PrismaClient();
 export default async function Page(props: {
   params: Promise<{ id: string }>;
 }) {
+
+  // Check if the user is authenticated
+  // If not authenticated, redirect to the login page
+  const { isAuthenticated } = getKindeServerSession();
+  if (!(await isAuthenticated())) {
+    return redirect("/api/auth/login");
+  }
+
   const { id } = await props.params;
   const numericId = Number(id);
 
